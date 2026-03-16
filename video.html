@@ -1,0 +1,223 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Videos - Yanna’s Album</title>
+  <style>
+    :root {
+      --primary: #b3003b;
+      --main-bg: linear-gradient(135deg, #ff00ff, #8a2be2, #ff1493, #ee82ee);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: var(--main-bg);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header {
+      text-align: center;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .item {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0,0,0,0.2);
+    }
+
+    .gallery video {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+    }
+
+    .label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      font-size: 11px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .label span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 10s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    footer { text-align: center; padding: 40px; }
+    footer a {
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 50px;
+      background: #fff;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .modal {
+      display: none; 
+      position: fixed; 
+      z-index: 1000; 
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-content { width: 90%; max-width: 450px; text-align: center; position: relative; }
+    .modal video { width: 100%; border-radius: 20px; border: 5px solid #fff; }
+
+    .close {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      font-size: 40px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      pointer-events: none;
+      animation: floatUp 1.5s ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-120px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header><h1>💖 Yanna’s Videos 💖</h1></header>
+
+  <main class="gallery">
+    <div class="item">
+      <video src="video/1.mp4" muted loop></video>
+      <div class="label"><span>🖤</span></div>
+    </div>
+
+    <div class="item">
+      <video src="video/2.mp4" muted loop></video>
+      <div class="label"><span>💛</span></div>
+    </div>
+
+    <div class="item">
+      <video src="video/3.mp4" muted loop></video>
+      <div class="label"><span>💚</span></div>
+    </div>
+
+    <div class="item">
+      <video src="video/4.mp4" muted loop></video>
+      <div class="label"><span>💙</span></div>
+    </div>
+
+    <div class="item">
+      <video src="video/5.mp4" muted loop></video>
+      <div class="label"><span>💜</span></div>
+    </div>
+  </main>
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <video id="modalVideo" controls></video>
+      <div id="modalLabel" class="label" style="position: relative; margin-top: 10px;"><span></span></div>
+    </div>
+  </div>
+
+  <footer><a href="2025.html">← Back to Album</a></footer>
+
+  <script>
+    const modal = document.getElementById("myModal");
+    const modalVideo = document.getElementById("modalVideo");
+    const modalLabel = document.getElementById("modalLabel").querySelector("span");
+    const closeBtn = document.querySelector(".close");
+    const galleryVideos = document.querySelectorAll(".gallery video");
+
+    galleryVideos.forEach(v => {
+      // Hover to preview
+      v.addEventListener('mouseenter', () => v.play());
+      v.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+
+      v.addEventListener("click", () => {
+        modal.style.display = "flex";
+        modalVideo.src = v.src;
+        modalLabel.textContent = v.nextElementSibling.textContent;
+        modalVideo.play();
+      });
+    });
+
+    const closeModal = () => { 
+      modal.style.display = "none"; 
+      modalVideo.pause(); 
+      modalVideo.src = ""; 
+    };
+
+    closeBtn.onclick = closeModal;
+    modal.onclick = (e) => { if(e.target === modal) closeModal(); };
+
+    document.body.addEventListener("click", (e) => {
+      if (e.target.closest(".gallery") || e.target.closest(".modal")) return; 
+      const heart = document.createElement("span");
+      heart.innerHTML = "❤️";
+      heart.className = "heart";
+      heart.style.left = `${e.pageX}px`;
+      heart.style.top = `${e.pageY}px`;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1500);
+    });
+  </script>
+</body>
+</html>

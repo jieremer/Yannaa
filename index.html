@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rose Loading Screen</title>
+  <style>
+    body{
+      margin:0;padding:0;height:100vh;display:flex;justify-content:center;align-items:center;
+      background:linear-gradient(180deg,#7F00FF,#FF00FF);
+      overflow:hidden;font-family:Arial,sans-serif;
+    }
+
+    /* Loading */
+    #loading{
+      position:absolute;inset:0;background:linear-gradient(180deg,#7F00FF,#FF00FF);
+      display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:10;
+    }
+    .rose{font-size:80px;animation:rotate 4s linear infinite}
+    @keyframes rotate{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+    /* Falling hearts */
+    .heart{position:absolute;top:-20px;color:#ffcccc;font-size:20px;animation:fall linear forwards}
+    @keyframes fall{to{transform:translateY(110vh);opacity:0}}
+
+    /* Main */
+    #main{display:none;text-align:center}
+
+    /* Fullscreen envelope container */
+    .envelope-container{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      width:100vw;
+      height:100vh;
+    }
+
+    /* 💌 Envelope button */
+    .love-letter{
+      position:relative;width:160px;height:100px;background:#fff;border:2px solid #ff4d6d;border-radius:6px;
+      box-shadow:0 4px 8px rgba(0,0,0,.3);overflow:hidden;cursor:pointer;transition:transform .25s ease;
+      perspective:800px;
+    }
+    .love-letter:focus{outline:none}
+
+    /* Flap */
+    .flap{
+      position:absolute;inset:0;background:#ff4d6d;clip-path:polygon(0 0,50% 50%,100% 0);
+      z-index:2;transform-origin:top;transform:rotateX(0);
+      pointer-events:none;
+      backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    }
+
+    /* Heart */
+    .love-letter span{
+      position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);
+      font-size:36px;z-index:1;
+    }
+
+    /* ---- Click sequence ---- */
+    .love-letter.send span{animation:dropHeart .5s ease-in-out forwards;}
+    @keyframes dropHeart{
+      from{top:35%;opacity:1;transform:translate(-50%,-50%) scale(1)}
+      to{top:100%;opacity:0;transform:translate(-50%,-50%) scale(.5)}
+    }
+    .love-letter.send .flap{animation:closeFlap .5s ease-in-out forwards;}
+    @keyframes closeFlap{from{transform:rotateX(0)}to{transform:rotateX(180deg)}}
+
+    /* Fullscreen zoom */
+    .love-letter.send{
+      pointer-events:none;
+      animation:fullscreenZoom .8s ease-in-out .5s forwards;
+    }
+    @keyframes fullscreenZoom{
+      from{transform:scale(1);opacity:1}
+      to{transform:scale(20);opacity:0} /* scale so big it fills screen */
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading screen -->
+  <div id="loading">
+    <div class="rose">🌹</div>
+  </div>
+
+  <!-- Main screen -->
+  <div id="main">
+    <div class="envelope-container">
+      <button class="love-letter" id="envelopeBtn">
+        <div class="flap"></div>
+        <span>❤️</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Falling hearts
+    function createHeart(){
+      const h=document.createElement("div");
+      h.className="heart"; h.innerHTML="❤️";
+      h.style.left=Math.random()*100+"vw";
+      h.style.animationDuration=(Math.random()*3+2)+"s";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),5000);
+    }
+    setInterval(createHeart,500);
+
+    // Show main after 7s
+    setTimeout(()=>{
+      document.getElementById("loading").style.display="none";
+      document.getElementById("main").style.display="block";
+    },7000);
+
+    // Click -> run animations -> redirect
+    const btn=document.getElementById("envelopeBtn");
+    btn.addEventListener("click",()=>{
+      btn.classList.add("send");
+    });
+    btn.addEventListener("animationend",(e)=>{
+      if(e.animationName==="fullscreenZoom"){
+        window.location.href="intro.html";
+      }
+    });
+  </script>
+</body>
+</html>

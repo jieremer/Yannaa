@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2025 Memories | Hon</title>
+  <style>
+    :root {
+      --primary: #b3003b;
+      --main-bg: linear-gradient(135deg, #ff00ff, #8a2be2, #ff1493, #ee82ee);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: var(--main-bg);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* TOP NAVIGATION */
+    .top-nav {
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 50px;
+      background: #fff;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .header-title {
+      flex: 1;
+      text-align: center;
+      margin-right: 70px; 
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    /* ALBUM GRID */
+    .album {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 25px;
+      padding: 20px;
+      width: 100%;
+      max-width: 450px;
+      margin: 10px auto;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      text-decoration: none;
+      aspect-ratio: 4 / 3;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s ease;
+      background: #000;
+    }
+
+    /* GIF BACKGROUNDS */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
+      opacity: 0.9;
+    }
+
+    /* FIXED PATHS */
+    .card-pics::before { 
+      background-image: url("gif-picutre and videos/gif picture.gif"); 
+    }
+
+    .card-vids::before { 
+      /* Fixed: Added .gif extension and matched filename 'gif videos' */
+      background-image: url("gif-picutre and videos/gif videos.gif"); 
+    }
+
+    .cap {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.5); 
+      backdrop-filter: blur(8px);
+      padding: 12px;
+      font-weight: 700;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* SECRET HEART */
+    #secretHeart {
+      text-align: center;
+      cursor: pointer;
+      font-size: 24px;
+      margin: 40px auto;
+      opacity: 0.3;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .secret-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .secret-content {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 30px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .close-btn {
+      margin-top: 15px;
+      padding: 10px 25px;
+      border-radius: 50px;
+      border: none;
+      background: #fff;
+      color: var(--primary);
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="index.html" class="back-btn">&larr; Back</a>
+    <div class="header-title">2025 Memories</div>
+  </nav>
+
+  <main class="album">
+    <a href="picture.html" class="card card-pics">
+      <div class="cap">📸 PICTURES</div>
+    </a>
+
+    <a href="video.html" class="card card-vids">
+      <div class="cap">🎥 VIDEOS</div>
+    </a>
+  </main>
+
+  <div id="secretHeart" onclick="toggleSecret()">❤️</div>
+
+  <div id="secretBox" class="secret-overlay" onclick="toggleSecret()">
+    <div class="secret-content" onclick="event.stopPropagation()">
+      <h2>For My Hon...</h2>
+      <p>Every picture and video here is a piece of my favorites. I love you. ❤️</p>
+      <button onclick="toggleSecret()" class="close-btn">Close</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleSecret() {
+      const box = document.getElementById('secretBox');
+      box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
+    }
+  </script>
+
+</body>
+</html>
